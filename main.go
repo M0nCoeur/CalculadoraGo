@@ -7,6 +7,34 @@ func main() {
 	var num1, num2 float64
 	var operador string
 
+	fmt.Print("Qual operação quer fazer? ")
+	fmt.Print("Operadores possíveis (+, -, /, *, porcentagem)")
+	fmt.Scan(&operador)
+
+	if	operador == ""
+
+	/* Aaa?
+
+porcentagem
+
+Formula da porcentagem: total * porcentagem / 100
+
+Qual é o valor total que deve considerado?
+
+10
+
+Em qual porcentagem você quer saber do total?
+
+2
+
+2% de 10 é: 0,2.
+
+Gostaria de realizar outra operação?
+
+
+
+*/
+
 	fmt.Print("Digite o primeiro número: ")
 	fmt.Scan(&num1)
 
