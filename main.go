@@ -16,6 +16,7 @@ func main() {
 	fmt.Print("Coloque o operador: +, -, /, *: ")
 	fmt.Scan(&operador)
 
+	// Podemos utilizar IF dentro de IF e nesse caso, o IF interno só será executado se o IF externo for verdadeiro.
 	if operador == "/" {
 		if num2 == 0 || num1 == 0 {
 			fmt.Print("Erro! Divisão por zero.")
@@ -23,6 +24,7 @@ func main() {
 		}
 	}
 
+	// O Switch deve ser usado quando vamos verificar uma variável várias vezes.
 	switch operador {
 	case "+":
 		fmt.Print(Soma(num1, num2))
