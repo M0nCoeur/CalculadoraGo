@@ -3,67 +3,57 @@ package main
 import "fmt"
 
 func main() {
+	var sair bool
 
-	var num1, num2 float64
-	var operador string
+	for !sair {
+		var num1, num2 float64
+		var operador string
 
-	fmt.Print("Qual operação quer fazer? ")
-	fmt.Print("Operadores possíveis (+, -, /, *, porcentagem)")
-	fmt.Scan(&operador)
+		fmt.Println("Qual operação quer fazer? ")
+		fmt.Print("Operadores possíveis (Adição, Subtração, Divisão, Multiplicação e Porcentagem): ")
+		fmt.Scan(&operador)
 
-	if	operador == ""
+		if operador == "Porcentagem" {
+			fmt.Println("Formula da Porcentagem: Total * Porcentagem / 100")
+			fmt.Println("Qual o valor total que deve ser considerado?")
+		}
 
-	/* Aaa?
+		fmt.Print("Digite o primeiro número: ")
+		fmt.Scan(&num1)
 
-porcentagem
+		fmt.Print("Digite o segundo número: ")
+		fmt.Scan(&num2)
 
-Formula da porcentagem: total * porcentagem / 100
+		// Podemos utilizar IF dentro de IF e nesse caso, o IF interno só será executado se o IF externo for verdadeiro.
+		if operador == "Divisão" {
+			if num2 == 0 || num1 == 0 {
+				fmt.Print("Erro! Divisão por zero.")
+				return
+			}
+		}
 
-Qual é o valor total que deve considerado?
+		// O Switch deve ser usado quando vamos verificar uma variável várias vezes.
+		switch operador {
+		case "Adição":
+			fmt.Println(Soma(num1, num2))
+		case "Subtração":
+			fmt.Println(Menos(num1, num2))
+		case "Multiplicação":
+			fmt.Println(Multi(num1, num2))
+		case "Divisão":
+			fmt.Println(Div(num1, num2))
+		case "Porcentagem":
+			fmt.Println(fmt.Sprint(num2, "% ", "de ", num1, " é: ", Porcentagem(num1, num2)))
+		default:
+			fmt.Println("Operador inválido")
+		}
 
-10
+		var option string
+		fmt.Print("Você deseja realizar outra operação? ")
+		fmt.Scan(&option)
 
-Em qual porcentagem você quer saber do total?
-
-2
-
-2% de 10 é: 0,2.
-
-Gostaria de realizar outra operação?
-
-
-
-*/
-
-	fmt.Print("Digite o primeiro número: ")
-	fmt.Scan(&num1)
-
-	fmt.Print("Digite o segundo número: ")
-	fmt.Scan(&num2)
-
-	fmt.Print("Coloque o operador: +, -, /, *: ")
-	fmt.Scan(&operador)
-
-	// Podemos utilizar IF dentro de IF e nesse caso, o IF interno só será executado se o IF externo for verdadeiro.
-	if operador == "/" {
-		if num2 == 0 || num1 == 0 {
-			fmt.Print("Erro! Divisão por zero.")
-			return
+		if option == "Não" {
+			sair = true
 		}
 	}
-
-	// O Switch deve ser usado quando vamos verificar uma variável várias vezes.
-	switch operador {
-	case "+":
-		fmt.Print(Soma(num1, num2))
-	case "-":
-		fmt.Print(Menos(num1, num2))
-	case "*":
-		fmt.Print(Multi(num1, num2))
-	case "/":
-		fmt.Print(Div(num1, num2))
-	default:
-		fmt.Println("Operador inválido")
-	}
-
 }

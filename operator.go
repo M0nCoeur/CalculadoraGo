@@ -21,5 +21,6 @@ func Div(num1, num2 float64) float64 {
 }
 
 func Porcentagem(total, porcentagem float64) float64 {
-	return total * (porcentagem / 100)
+	resultado := total * (porcentagem / 100)
+	return resultado
 }
