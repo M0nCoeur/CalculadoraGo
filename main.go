@@ -38,57 +38,75 @@ func NewGame() *Game {
 // Update implements ebiten.Game interface
 func (g *Game) Update() error {
 	_, err := g.debugUI.Update(func(ctx *debugui.Context) error {
-		// Main window
+		// Main window following official debugui example pattern
 		ctx.Window("🧮 Calculadora Go", image.Rect(10, 10, screenWidth-10, screenHeight-10), func(layout debugui.ContainerLayout) {
-			// Title
-			ctx.Text("CALCULADORA GO")
-			
-			// Input fields
-			ctx.Text("Primeiro número:")
-			ctx.TextField(&g.num1Input)
-			
-			ctx.Text("Segundo número:")
-			ctx.TextField(&g.num2Input)
-			
-			ctx.Text("Operações:")
-			
-			// Operation buttons
-			ctx.Button("Adição").On(func() {
-				g.executarOperacao("Adição")
+			// Title header
+			ctx.Header("CALCULADORA GO", false, func() {
+				ctx.Text("Uma calculadora simples feita com DebugUI")
 			})
 			
-			ctx.Button("Subtração").On(func() {
-				g.executarOperacao("Subtração")
+			// Input section
+			ctx.Header("Entrada de Números", true, func() {
+				ctx.Text("Primeiro número:")
+				ctx.TextField(&g.num1Input)
+				
+				ctx.Text("Segundo número:")
+				ctx.TextField(&g.num2Input)
 			})
 			
-			ctx.Button("Multiplicação").On(func() {
-				g.executarOperacao("Multiplicação")
+			// Operations section
+			ctx.Header("Operações", true, func() {
+				ctx.SetGridLayout([]int{-1, -1}, nil)
+				
+				// First row of buttons
+				ctx.Button("Adição").On(func() {
+					g.executarOperacao("Adição")
+				})
+				
+				ctx.Button("Subtração").On(func() {
+					g.executarOperacao("Subtração")
+				})
+				
+				// Second row of buttons
+				ctx.Button("Multiplicação").On(func() {
+					g.executarOperacao("Multiplicação")
+				})
+				
+				ctx.Button("Divisão").On(func() {
+					g.executarOperacao("Divisão")
+				})
+				
+				// Third row
+				ctx.Button("Porcentagem").On(func() {
+					g.executarOperacao("Porcentagem")
+				})
+				
+				ctx.Button("Limpar").On(func() {
+					g.limparTudo()
+				})
 			})
 			
-			ctx.Button("Divisão").On(func() {
-				g.executarOperacao("Divisão")
+			// Results section
+			ctx.Header("Resultado", true, func() {
+				// Error display
+				if g.erro != "" {
+					ctx.Text("⚠️ Erro: " + g.erro)
+				}
+				
+				// Result display
+				if g.showResult && g.resultado != "" {
+					ctx.Text("✅ " + g.resultado)
+				}
+				
+				if g.erro == "" && !g.showResult {
+					ctx.Text("Digite os números e escolha uma operação")
+				}
 			})
 			
-			ctx.Button("Porcentagem").On(func() {
-				g.executarOperacao("Porcentagem")
+			// Footer
+			ctx.Header("Informações", false, func() {
+				ctx.Text("Desenvolvido em Go com DebugUI (Ebitengine)")
 			})
-			
-			ctx.Button("Limpar").On(func() {
-				g.limparTudo()
-			})
-			
-			// Error display
-			if g.erro != "" {
-				ctx.Text("⚠️ " + g.erro)
-			}
-			
-			// Result display
-			if g.showResult && g.resultado != "" {
-				ctx.Text("Resultado:")
-				ctx.Text(g.resultado)
-			}
-			
-			ctx.Text("Desenvolvido em Go com DebugUI")
 		})
 		
 		return nil
