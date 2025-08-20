@@ -1,59 +1,200 @@
+//go:build !test && !console
+
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"image"
+	"image/color"
+	"strconv"
+
+	"github.com/ebitengine/debugui"
+	"github.com/hajimehoshi/ebiten/v2"
+)
+
+const (
+	screenWidth  = 500
+	screenHeight = 400
+)
+
+// Game implements ebiten.Game interface
+type Game struct {
+	debugUI     debugui.DebugUI
+	num1Input   string
+	num2Input   string
+	resultado   string
+	erro        string
+	showResult  bool
+}
+
+// NewGame creates a new Game instance
+func NewGame() *Game {
+	return &Game{
+		num1Input: "0",
+		num2Input: "0",
+	}
+}
+
+// Update implements ebiten.Game interface
+func (g *Game) Update() error {
+	_, err := g.debugUI.Update(func(ctx *debugui.Context) error {
+		// Main window following official debugui example pattern
+		ctx.Window("🧮 Calculadora Go", image.Rect(10, 10, screenWidth-10, screenHeight-10), func(layout debugui.ContainerLayout) {
+			// Title header
+			ctx.Header("CALCULADORA GO", false, func() {
+				ctx.Text("Uma calculadora simples feita com DebugUI")
+			})
+			
+			// Input section
+			ctx.Header("Entrada de Números", true, func() {
+				ctx.Text("Primeiro número:")
+				ctx.TextField(&g.num1Input)
+				
+				ctx.Text("Segundo número:")
+				ctx.TextField(&g.num2Input)
+			})
+			
+			// Operations section
+			ctx.Header("Operações", true, func() {
+				ctx.SetGridLayout([]int{-1, -1}, nil)
+				
+				// First row of buttons
+				ctx.Button("Adição").On(func() {
+					g.executarOperacao("Adição")
+				})
+				
+				ctx.Button("Subtração").On(func() {
+					g.executarOperacao("Subtração")
+				})
+				
+				// Second row of buttons
+				ctx.Button("Multiplicação").On(func() {
+					g.executarOperacao("Multiplicação")
+				})
+				
+				ctx.Button("Divisão").On(func() {
+					g.executarOperacao("Divisão")
+				})
+				
+				// Third row
+				ctx.Button("Porcentagem").On(func() {
+					g.executarOperacao("Porcentagem")
+				})
+				
+				ctx.Button("Limpar").On(func() {
+					g.limparTudo()
+				})
+			})
+			
+			// Results section
+			ctx.Header("Resultado", true, func() {
+				// Error display
+				if g.erro != "" {
+					ctx.Text("⚠️ Erro: " + g.erro)
+				}
+				
+				// Result display
+				if g.showResult && g.resultado != "" {
+					ctx.Text("✅ " + g.resultado)
+				}
+				
+				if g.erro == "" && !g.showResult {
+					ctx.Text("Digite os números e escolha uma operação")
+				}
+			})
+			
+			// Footer
+			ctx.Header("Informações", false, func() {
+				ctx.Text("Desenvolvido em Go com DebugUI (Ebitengine)")
+			})
+		})
+		
+		return nil
+	})
+	
+	return err
+}
+
+// Draw implements ebiten.Game interface
+func (g *Game) Draw(screen *ebiten.Image) {
+	screen.Fill(color.RGBA{48, 48, 48, 255}) // Dark background
+	g.debugUI.Draw(screen)
+}
+
+// Layout implements ebiten.Game interface
+func (g *Game) Layout(outsideWidth, outsideHeight int) (int, int) {
+	return screenWidth, screenHeight
+}
+
+func (g *Game) executarOperacao(op string) {
+	// Limpar erro anterior
+	g.erro = ""
+
+	// Converter inputs para float64
+	num1, err1 := strconv.ParseFloat(g.num1Input, 64)
+	num2, err2 := strconv.ParseFloat(g.num2Input, 64)
+
+	if err1 != nil {
+		g.erro = "Primeiro número inválido"
+		g.showResult = false
+		return
+	}
+
+	if err2 != nil {
+		g.erro = "Segundo número inválido"
+		g.showResult = false
+		return
+	}
+
+	// Verificar divisão por zero
+	if op == "Divisão" && (num2 == 0 || num1 == 0) {
+		g.erro = "Erro! Divisão por zero."
+		g.showResult = false
+		return
+	}
+
+	// Executar operação
+	var res float64
+	switch op {
+	case "Adição":
+		res = Soma(num1, num2)
+		g.resultado = fmt.Sprintf("%.2f + %.2f = %.2f", num1, num2, res)
+	case "Subtração":
+		res = Menos(num1, num2)
+		g.resultado = fmt.Sprintf("%.2f - %.2f = %.2f", num1, num2, res)
+	case "Multiplicação":
+		res = Multi(num1, num2)
+		g.resultado = fmt.Sprintf("%.2f × %.2f = %.2f", num1, num2, res)
+	case "Divisão":
+		res = Div(num1, num2)
+		g.resultado = fmt.Sprintf("%.2f ÷ %.2f = %.2f", num1, num2, res)
+	case "Porcentagem":
+		res = Porcentagem(num1, num2)
+		g.resultado = fmt.Sprintf("%.2f%% de %.2f = %.2f", num2, num1, res)
+	default:
+		g.erro = "Operação inválida"
+		g.showResult = false
+		return
+	}
+
+	g.showResult = true
+}
+
+func (g *Game) limparTudo() {
+	g.num1Input = "0"
+	g.num2Input = "0"
+	g.resultado = ""
+	g.showResult = false
+	g.erro = ""
+}
 
 func main() {
-	var sair bool
+	ebiten.SetWindowSize(screenWidth, screenHeight)
+	ebiten.SetWindowTitle("Calculadora Go - DebugUI")
+	ebiten.SetWindowResizingMode(ebiten.WindowResizingModeDisabled)
 
-	for !sair {
-		var num1, num2 float64
-		var operador string
-
-		fmt.Println("Qual operação quer fazer? ")
-		fmt.Print("Operadores possíveis (Adição, Subtração, Divisão, Multiplicação e Porcentagem): ")
-		fmt.Scan(&operador)
-
-		if operador == "Porcentagem" {
-			fmt.Println("Formula da Porcentagem: Total * Porcentagem / 100")
-			fmt.Println("Qual o valor total que deve ser considerado?")
-		}
-
-		fmt.Print("Digite o primeiro número: ")
-		fmt.Scan(&num1)
-
-		fmt.Print("Digite o segundo número: ")
-		fmt.Scan(&num2)
-
-		// Podemos utilizar IF dentro de IF e nesse caso, o IF interno só será executado se o IF externo for verdadeiro.
-		if operador == "Divisão" {
-			if num2 == 0 || num1 == 0 {
-				fmt.Print("Erro! Divisão por zero.")
-				return
-			}
-		}
-
-		// O Switch deve ser usado quando vamos verificar uma variável várias vezes.
-		switch operador {
-		case "Adição":
-			fmt.Println(Soma(num1, num2))
-		case "Subtração":
-			fmt.Println(Menos(num1, num2))
-		case "Multiplicação":
-			fmt.Println(Multi(num1, num2))
-		case "Divisão":
-			fmt.Println(Div(num1, num2))
-		case "Porcentagem":
-			fmt.Println(fmt.Sprint(num2, "% ", "de ", num1, " é: ", Porcentagem(num1, num2)))
-		default:
-			fmt.Println("Operador inválido")
-		}
-
-		var option string
-		fmt.Print("Você deseja realizar outra operação? ")
-		fmt.Scan(&option)
-
-		if option == "Não" {
-			sair = true
-		}
+	game := NewGame()
+	if err := ebiten.RunGame(game); err != nil {
+		panic(err)
 	}
 }

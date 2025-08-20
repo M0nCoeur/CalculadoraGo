@@ -1,0 +1,23 @@
+# Binaries
+CALC
+CalculadoraGo
+calculadora-gui
+calculadora-console
+*.exe
+
+# Build artifacts
+*.o
+*.so
+*.dylib
+
+# Test binary
+*.test
+
+# Output of the go coverage tool
+*.out
+
+# Dependency directories
+vendor/
+
+# Go workspace file
+go.work
