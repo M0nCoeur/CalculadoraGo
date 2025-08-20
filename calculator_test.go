@@ -110,7 +110,7 @@ func TestGUIFunctionality(t *testing.T) {
 	fmt.Println("---")
 	
 	fmt.Println("=== Resumo dos Recursos da GUI ===")
-	fmt.Println("✅ Interface gráfica com Dear ImGui")
+	fmt.Println("✅ Interface gráfica com DebugUI")
 	fmt.Println("✅ Campos de entrada para números")
 	fmt.Println("✅ Botões para cada operação matemática")
 	fmt.Println("✅ Exibição colorida dos resultados")

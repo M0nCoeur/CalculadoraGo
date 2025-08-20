@@ -1,9 +1,9 @@
 # CalculadoraGo
 
-## Uma calculadora em Go com interface gráfica usando Dear ImGui
+## Uma calculadora em Go com interface gráfica usando DebugUI
 
 Esta calculadora oferece duas interfaces:
-1. **Interface Gráfica (GUI)** - Usando Dear ImGui através da biblioteca giu
+1. **Interface Gráfica (GUI)** - Usando DebugUI da Ebitengine
 2. **Interface de Terminal** - Versão console original
 
 ### Funcionalidades
@@ -37,14 +37,15 @@ go build -tags console -o calculadora-console
 ### Dependências
 
 - Go 1.23+
-- Dear ImGui (através da biblioteca `github.com/AllenDang/giu`)
-- OpenGL e GLFW (para renderização gráfica)
+- DebugUI (através da biblioteca `github.com/ebitengine/debugui`)
+- Ebitengine v2 para renderização gráfica
+- X11 development libraries (Linux)
 
 ### Instalação das Dependências no Ubuntu/Debian
 
 ```bash
 sudo apt-get update
-sudo apt-get install -y libgl1-mesa-dev libglfw3-dev libglew-dev
+sudo apt-get install -y libx11-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev libgl1-mesa-dev libxxf86vm-dev
 ```
 
 ### Build
@@ -57,13 +58,16 @@ go build -o calculadora-gui
 go build -tags console -o calculadora-console
 ```
 
-### Screenshot
+### Testes
 
-![Calculadora Go - Interface Gráfica](screenshot.png)
+```bash
+# Executar testes das funções matemáticas
+go test -tags test
+```
 
 ### Tecnologias Utilizadas
 
 - **Linguagem**: Go
-- **GUI Framework**: giu (Go bindings para Dear ImGui)
-- **Renderização**: OpenGL
-- **Sistema de Janelas**: GLFW
+- **GUI Framework**: DebugUI (parte da Ebitengine)
+- **Game Engine**: Ebitengine v2
+- **Renderização**: OpenGL/Vulkan (através da Ebitengine)
