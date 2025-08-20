@@ -30,7 +30,8 @@ A interface gráfica oferece:
 
 #### Interface de Console (Backup)
 ```bash
-go run main_console.go operator.go
+go build -tags console -o calculadora-console
+./calculadora-console
 ```
 
 ### Dependências
@@ -49,11 +50,11 @@ sudo apt-get install -y libgl1-mesa-dev libglfw3-dev libglew-dev
 ### Build
 
 ```bash
-# Interface gráfica
+# Interface gráfica (padrão)
 go build -o calculadora-gui
 
 # Interface console  
-go build -o calculadora-console main_console.go operator.go
+go build -tags console -o calculadora-console
 ```
 
 ### Screenshot

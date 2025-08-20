@@ -1,0 +1,34 @@
+=============================================
+           🧮 CALCULADORA GO
+=============================================
+
+Primeiro número:  [    10.50     ]
+
+Segundo número:   [     5.25     ]
+
+Operação:
+┌─────────┬─────────┬─────────────┐
+│ Adição  │Subtração│Multiplicação│
+└─────────┴─────────┴─────────────┘
+┌─────────┬───────────┬─────────┐
+│ Divisão │Porcentagem│ Limpar  │
+└─────────┴───────────┴─────────┘
+
+=======================================
+              Resultado:
+         10.50 + 5.25 = 15.75
+=======================================
+
+    Desenvolvido em Go com Dear ImGui
+
+## Interface Features:
+✅ Modern window with clean design
+✅ Text input fields for numbers
+✅ Organized operation buttons in two rows
+✅ Real-time result display
+✅ Error messages in red when invalid input
+✅ Success results in green
+✅ Hover effects on buttons
+✅ Clean button to reset all fields
+✅ Non-resizable 500x400 window
+✅ Professional spacing and alignment

@@ -1,6 +1,8 @@
 # Binaries
 CALC
 CalculadoraGo
+calculadora-gui
+calculadora-console
 *.exe
 
 # Build artifacts
